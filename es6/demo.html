@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // console.log("wangdada")
+      let name = "wangdada";
+      console.log(name);
+      console.log(typeof name);
+
+      const PI = 3.14;
+      console.log(PI);
+      console.log(typeof PI);
+
+      // 对象
+      let boy = {
+        name: "daviad",
+        age: 12,
+      };
+      console.log(boy);
+      console.log(typeof boy);
+
+      // map
+      let girl = new Map([
+        ["name", "luna"],
+        ["age", 18],
+      ]);
+      console.log(girl);
+      console.log(typeof girl);
+
+      // set 相同类型下 是不重复的
+      let number = new Set([1, 2, 3, 2, 1]);
+      console.log(number);
+      console.log(typeof number);
+
+      // 数组
+      let arr = ["a", "b", "c", "a", "b"];
+      console.log(arr);
+      console.log(typeof arr);
+
+      // 函数
+      function add(x, y) {
+        return x + y;
+      }
+      console.log(add(20, 30));
+
+      // 类 class
+      // 类是一种蓝图或者模板，用于创建具有相同属性和方法的对象
+      class Person {
+        name;
+        age;
+        constructor(userName, userAge) {
+          this.name = userName;
+          this.age = userAge;
+        }
+
+        info() {
+          console.log("name:", this.name, ",age:", this.age);
+        }
+      }
+
+      let person = new Person("dada", 22);
+      person.info();
+
+      // 匿名函数
+      let sub = function (x, y) {
+        return x - y;
+      };
+      console.log(sub(30, 5));
+
+      // 箭头函数
+      let plus =(a,b) =>{
+        
+      }
+    </script>
+  </body>
+</html>

@@ -29,6 +29,32 @@
       delElement = arr.pop();
       console.log("arr:", arr);
       console.log("delElement:", delElement);
+
+      // splice：删除指定元素 splice(要删除元素索引位置，要删除的数量)
+      let delArr = arr.splice(2, 2);
+      console.log("arr:", arr);
+      console.log("delArr:", delArr);
+
+      // 点到数组中元素的顺序
+      arr.reverse();
+      console.log("arr:", arr);
+
+      // 数组中的元素按照拼音字母顺序排序
+      let arr2 = ["bann", "app", "ora"];
+      arr2.sort();
+      console.log("arr2:", arr2);
+
+      // 比较函数
+      let arr3 = [5, 20, 13, 1, 4];
+      arr3.sort((a, b) => a - b);
+      console.log("arr3:", arr3);
+
+      // 筛选符合条件的元素，返回一个新的数组
+      let arr4 = [10, 11, 12, 13, 14, 15];
+      let newArr4 = arr4.filter((value) => {
+        return value > 12;
+      });
+      console.log("newArr4:", newArr4);
     </script>
   </body>
 </html>

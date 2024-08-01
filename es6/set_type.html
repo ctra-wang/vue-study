@@ -10,6 +10,31 @@
       // 创建set集合
       let fruis = new Set(["apple", "orange", "banana"]);
       console.log(fruis);
+
+      // add
+      fruis.add("mango");
+      console.log(fruis);
+      // del
+      fruis.delete("banana");
+      console.log(fruis);
+      // 判断是否存在
+      // 存在：true，不存在：false
+      console.log(fruis.has("banana"));
+
+      console.log(fruis.size);
+
+      // set 转位 array
+      let arr = Array.from(fruis);
+      console.log(arr);
+
+      // 扩展运算符
+      let arr1 = [...fruis];
+      console.log(arr1);
+
+      // 使用 set 去重
+      let numberArr = [1, 1, 2, 2, 3, 3, 4];
+      let arr2 = new Set(numberArr)
+      console.log(arr2);
     </script>
   </body>
 </html>

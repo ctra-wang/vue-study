@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 创建 object 对象
+      let teacher = {
+        name: "dada",
+        gender: "男",
+        web: "ctra.top",
+      };
+
+      console.log(teacher);
+
+      // 添加属性
+      teacher.height = 175;
+      console.log(teacher);
+      teacher.web = "www.ctra.top";
+      console.log(teacher);
+
+      // 删除属性
+
+      delete teacher.gender;
+      console.log(teacher);
+
+      console.log("----------");
+      // 判断 属性 是否存在在对象中
+      let has = "gender" in teacher;
+      console.log(has);
+
+      let has1 = "name" in teacher;
+      console.log(has1);
+
+      // 获取对象的属性
+      console.log(Object.keys(teacher));
+
+      // 获取对象的属性长度
+      console.log(Object.keys(teacher).length);
+
+      // 遍历 对象
+      for (let key in teacher) {
+        console.log("for...in key:", key, ",value:", teacher[key]);
+      }
+    </script>
+  </body>
+</html>

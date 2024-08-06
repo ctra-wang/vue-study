@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 创建一个set集合
+      let teacher = new Map([
+        ["name", "wangdada"],
+        ["gender", "男"],
+        ["web", "ctra.top"],
+      ]);
+      console.log(teacher);
+
+      // 新增 一个键值对
+      teacher.set("height", 155);
+      console.log(teacher);
+
+      // 删除 一个键值对
+      teacher.delete("gender");
+      console.log(teacher);
+
+      // 通过 has判断 key 是否存在
+      console.log(teacher.has("gender"));
+
+      // map 大小
+      console.log(teacher.size);
+
+      // 遍历map的 key value
+      teacher.forEach((value, index) => {
+        console.log("value:", value, ",index:", index);
+      });
+
+      //  将Map集合转为数组
+      let arr = Array.from(teacher);
+      console.log(arr);
+
+      // 使用扩展运算符，将map转为数组
+      let arr2 = [...teacher];
+      console.log("arr2:", arr2);
+
+      // 使用 for...of 循环遍历 Map 集合
+      // 返回： 数组 ['name', 'wangdada'] ，使用索引可以获取键和值
+      console.log("-------------");
+      for (let value of teacher) {
+        console.log("for...of:", value);
+      }
+
+      // 使用 for...of 循环遍历 Map 集合
+      // 解构可以从数组或对象中提取 值并赋给变量
+      // [key,value] 就是一种解构语法，用于将Map集合中的键值对结构为key和value两个变量
+      for (let [key, value] of teacher) {
+        console.log("for...of: key:", key, ",value:", value);
+      }
+
+      teacher.forEach((value, key) => {
+        console.log("for...of: key:", key, ",value:", value);
+      });
+
+      // 清空 Map结合
+      teacher.clear();
+      console.log(teacher);
+    </script>
+  </body>
+</html>

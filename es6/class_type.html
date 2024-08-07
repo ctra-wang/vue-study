@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 创建  Person 类
+      class Person {
+        name;
+        #web; // 私有属性方式：#
+
+        constructor(name, web) {
+          this.name = name;
+          this.#web = web;
+        }
+
+        // 使用存取器 getter 获取私有属性
+        get web() {
+          return this.#web;
+        }
+
+        set web(value) {
+          this.#web = value;
+        }
+
+        info() {
+          // return "姓名：" + this.name + " 个人网站：" + this.web;
+
+          // 字符串模板
+          return `姓名：${this.name} 个人网站：${this.#web}`
+        }
+      }
+
+      let person = new Person("wangdada", "ctra.top");
+      console.log(person.info());
+      person.web="baidu.com"
+      console.log(person.info());
+      console.log(person.web);
+
+    </script>
+  </body>
+</html>

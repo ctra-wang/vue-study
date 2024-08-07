@@ -45,6 +45,17 @@
       for (let key in teacher) {
         console.log("for...in key:", key, ",value:", teacher[key]);
       }
+
+      // Object.entries() 用于获取对象的键值对数组 (二维数组)
+      console.log(Object.entries(teacher));
+
+      Object.entries(teacher).forEach(([key, value]) => {
+        console.log("forEach key:", key, ",value:", value);
+      });
+
+      // 清空对象
+      teacher = {};
+      console.log(teacher);
     </script>
   </body>
 </html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 创建  Person 类
+      class Person {
+        name;
+        gender;
+
+        constructor(name, gender) {
+          this.name = name;
+          this.gender = gender;
+        }
+
+        sleep() {
+          return `${this.name} 休息中...`;
+        }
+      }
+
+      class Wdd extends Person {
+        web;
+        constructor(name, gender, web) {
+          super(name, gender);
+          this.web = web;
+        }
+        eat() {
+          return `${this.name} 吃零食`;
+        }
+      }
+
+      let wdd = new Wdd("wadd", 1, "ctra.top");
+      console.log(wdd.web);
+      console.log(wdd.eat());
+      console.log(wdd.gender)
+      console.log(wdd.sleep());
+    </script>
+  </body>
+</html>

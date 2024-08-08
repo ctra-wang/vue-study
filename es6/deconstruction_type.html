@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let [x, y] = [1, 2];
+      console.log("x:", x, "y:", y);
+
+      // 获取数组[1,2,3,]最后一个元素
+
+      let [, , c] = [1, 2, 3];
+      console.log(c);
+
+      // 解构与拓展运算符
+      // 打印：(5) [2, 3, 4, 5, 6]
+      let [A, ...b] = [1, 2, 3, 4, 5, 6];
+      console.log("A:", A, "b:", b);
+
+      let [e, d] = [100];
+      console.log("e:", e, "d:", d);
+
+      // 含默认值
+      let [e1, d1 = 200] = [100];
+      console.log("e1:", e1, "d1:", d1);
+
+      // 两数交换
+      let x1 = 10;
+      let y1 = 30;
+      [x1, y1] = [y1, x1];
+      console.log("x1:", x1, "y1:", y1);
+
+      let person = {
+        name: "wadd",
+        gender: 1,
+        web: "ctra.top",
+      };
+
+      let { name } = person;
+      console.log("name:", name);
+
+      let { name:username,gender,web } = person;
+      console.log("name:", username,"gender:",gender,"web:",web);
+    </script>
+  </body>
+</html>

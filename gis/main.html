@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <base
+      href="https://webapi.amap.com/ui/1.1/ui/geo/DistrictExplorer/examples/"
+    />
+    <meta
+      name="viewport"
+      content="initial-scale=1.0, user-scalable=no, width=device-width"
+    />
+    <title>行政区浏览</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #container {
+        height: 100vh;
+      }
+    </style>
+    <script type="text/javascript">
+      window._AMapSecurityConfig = {
+        securityJsCode: "9d933df3741002bcb16c347b5e6c626a",
+      };
+    </script>
+    <script
+      type="text/javascript"
+      src="https://webapi.amap.com/maps?v=2.0&key=d11c6d905578b98383086900658fdaaa"
+    ></script>
+    <script src="https://webapi.amap.com/ui/1.1/main.js?v=1.1.1"></script>
+  </head>
+  <body>
+    <select
+      id="provinceSelect"
+      style="position: absolute; top: 10px; left: 10px; z-index: 1000"
+    ></select>
+
+    <div id="container"></div>
+
+    <script type="text/javascript">
+      var provinces = [
+        // { name: "北京", adcode: "110000" },
+        // { name: "天津", adcode: "120000" },
+        // { name: "河北", adcode: "130000" },
+        // { name: "山西", adcode: "140000" },
+        // ... 其他省份
+        { name: "甘肃省", adcode: "620000" },
+        { name: "陕西省", adcode: "610000" },
+        { name: "青海省", adcode: "630000" },
+        { name: "宁夏回族自治区", adcode: "640000" },
+        { name: "新疆维吾尔自治区", adcode: "650000" },
+      ];
+
+      var select = document.getElementById("provinceSelect");
+      provinces.forEach(function (province) {
+        var option = document.createElement("option");
+        option.value = province.adcode;
+        option.text = province.name;
+        select.appendChild(option);
+      });
+      var Action = (function () {
+        function main(row) {
+          Object.assign(
+            this,
+            {
+              __initAdcode: 100000,
+              __strokeColor: "#1C6EAD",
+              __strokeOpacity: 1,
+              __fillColor: "#2776F8",
+              __fillOpacity: 0.2,
+              __fillActiveOpacity: 0.5,
+              __avoidArea: [0, 0, 0, 0],
+            },
+            row
+          );
+          this.__instance = new AMap.Map("container", row);
+          AMapUI.load(["ui/geo/DistrictExplorer"], (Explorer) => {
+            if (!Explorer) {
+              console.error("DistrictExplorer 加载失败");
+              return;
+            }
+            console.log("DistrictExplorer:", Explorer);
+
+            this.__districtExplorer = new Explorer({
+              eventSupport: true,
+              map: this.__instance,
+            });
+            console.log("DistrictExplorer 实例:", this.__districtExplorer);
+            this.__tipLayer = document.createElement("div");
+            this.__tipMarker = new AMap.Marker({
+              content: this.__tipLayer,
+              offset: new AMap.Pixel(0, 0),
+              bubble: true,
+            });
+            this.onEvent();
+            this.onChange(this.__initAdcode);
+
+            // 添加卫星图层
+            var satelliteLayer = new AMap.TileLayer.Satellite({
+              zIndex: 9, // 设置卫星图层的层级
+            });
+            satelliteLayer.setMap(this.__instance);
+
+            AMap.plugin("AMap.Weather", () => {
+              var weather = new AMap.Weather();
+              select.addEventListener("change", () => {
+                var provinceName = provinces.find(
+                  (p) => p.adcode === select.value
+                ).name;
+                weather.getLive(provinceName, (err, data) => {
+                  if (!err) {
+                    alert(
+                      `当前天气：${data.weather}, 温度：${data.temperature}°C, 风向：${data.windDirection}`
+                    );
+
+                    var windMarker = new AMap.Marker({
+                      position: this.__instance.getCenter(),
+                      content: `<div style="color: #333; font-size: 14px;">
+                                <span style="font-weight: bold;">风向: ${data.windDirection}</span>
+                              </div>`,
+                      offset: new AMap.Pixel(-15, -15),
+                    });
+                    windMarker.setMap(this.__instance);
+                  }
+                });
+              });
+            });
+
+
+          });
+        }
+
+        main.prototype.onEvent = function () {
+          const DE = this.__districtExplorer;
+          const tipElem = this.__tipLayer;
+          DE.on("featureMouseout featureMouseover", (e, feature) => {
+            const props = feature.properties;
+            const isHover = e.type === "featureMouseover";
+            this.__tipMarker.setMap(isHover ? this.__instance : null);
+            if (isHover) {
+              const position = e.originalEvent
+                ? e.originalEvent.lnglat
+                : props.center;
+              this.__tipMarker.setPosition(position);
+              const overCallback = this.__onFeatureOver;
+              overCallback && overCallback.call(this, props);
+            } else {
+              const outCallback = this.__onFeatureOut;
+              outCallback && outCallback.call(this, props);
+            }
+            const array = DE.findFeaturePolygonsByAdcode(props.adcode);
+            array.forEach((u) => {
+              const FO = isHover
+                ? this.__fillActiveOpacity
+                : this.__fillOpacity;
+              u.setOptions({ fillOpacity: FO });
+            });
+          });
+
+          DE.on("featureMousemove", (e, feature) => {
+            this.__tipMarker.setPosition(e.originalEvent.lnglat);
+            const moveCallback = this.__onFeatureMove;
+            moveCallback && moveCallback.call(this, feature.properties);
+          });
+
+          DE.on("featureClick", (e, feature) => {
+            const clickCallback = this.__onFeatureClick;
+            clickCallback && clickCallback.call(this, feature.properties);
+          });
+
+          DE.on("outsideClick", (e) => {
+            DE.locatePosition(
+              e.originalEvent.lnglat,
+              (error, routeFeatures) => {
+                const outsideCallback = this.__onFeatureClickOutside;
+                outsideCallback && outsideCallback.call(this, routeFeatures);
+                const nextFeatures = routeFeatures && routeFeatures[1];
+                const adcode = nextFeatures
+                  ? nextFeatures.properties.adcode
+                  : this.__initAdcode;
+                this.onChange(adcode);
+              }
+            );
+          });
+        };
+
+        main.prototype.onChange = function (code) {
+          const currCode = this.__areaNode || {};
+          if (+currCode.adcode === +code) return;
+          const DE = this.__districtExplorer;
+          DE.loadAreaNode(code, (error, areaNode) => {
+            if (error) return;
+            this.__areaNode = areaNode;
+            DE.setAreaNodesForLocating([areaNode]);
+            this.onRenderArea(areaNode);
+          });
+        };
+
+        main.prototype.onRenderArea = function (areaNode) {
+          const DE = this.__districtExplorer;
+          DE.setHoverFeature(null);
+          this.__instance.setBounds(areaNode.getBounds(), null, null, true);
+          DE.clearFeaturePolygons();
+          this.onRemoveText();
+          DE.renderSubFeatures(areaNode, (feature, i) => {
+            this.onAddText(feature.properties);
+            return {
+              cursor: "pointer",
+              bubble: true,
+              strokeColor: this.__strokeColor,
+              strokeOpacity: this.__strokeOpacity,
+              strokeWeight: 1,
+              fillColor: this.__fillColor,
+              fillOpacity: this.__fillOpacity,
+            };
+          });
+
+          const pprow = this.onLevel(areaNode.adcode);
+          pprow.district &&
+            this.onAddText(areaNode._data.geoData.parent.properties);
+          DE.renderParentFeature(areaNode, {
+            cursor: "pointer",
+            bubble: true,
+            strokeColor: this.__strokeColor,
+            strokeOpacity: this.__strokeOpacity,
+            strokeWeight: 2,
+            fillColor: null,
+            fillOpacity: this.__fillOpacity,
+          });
+
+          const allpolys = this.__districtExplorer.getAllFeaturePolygons();
+          this.__instance.setFitView(allpolys, false, this.__avoidArea);
+        };
+
+        main.prototype.onAddText = function (props) {
+          if (!this.__visibleText) return;
+          this.__textList = [
+            ...(this.__textList || []),
+            new AMap.Text({
+              text: props.name,
+              anchor: "center",
+              angle: -2,
+              bubble: true,
+              zIndex: 20,
+              position: props.centroid,
+              map: this.__instance,
+            }),
+          ];
+        };
+
+        main.prototype.onRemoveText = function () {
+          this.__instance.remove(this.__textList || []);
+          this.__textList = [];
+        };
+
+        main.prototype.onLevel = function (adcode) {
+          const [adcodeValue, initValue] = [adcode, this.__initAdcode].map(
+            (u) => u.toString()
+          );
+          const [len, initZeroLen] = [adcodeValue, initValue].map(
+            (u) => (u.match(/0+$/) || [""])[0].length
+          );
+          const R = {
+            district: len <= 1,
+            city: len > 1 && len <= 3,
+            province: len === 4,
+            country: len === 5,
+          };
+          const array = [
+            {
+              bool: R.district,
+              targetBool: initZeroLen > 1,
+              v: Number(adcodeValue.substr(0, 4) + "00"),
+            },
+            {
+              bool: R.city,
+              targetBool: initZeroLen > 3,
+              v: Number(adcodeValue.substr(0, 2) + "0000"),
+            },
+            { bool: true, targetBool: true, v: 100000, tV: +initValue },
+          ];
+          const parentCode = array.find((u) => u.bool);
+          const parentTargetCode = array.find((u) => u.bool && u.targetBool);
+          R.value = len;
+          R.parent = parentCode.v;
+          R.targetParent = parentTargetCode.tV || parentTargetCode.v;
+          return R;
+        };
+
+        return main;
+      })();
+
+      select.addEventListener("change", function () {
+        var adcode = this.value;
+        A2.onChange(adcode);
+      });
+
+      var A2 = new Action({
+        showLabel: 0,
+        mapStyle: "amap://styles/fresh",
+        zoom: 8,
+        __visibleText: true,
+        __initAdcode: provinces[0].adcode,
+        __onFeatureClick(props) {
+          this.onChange(props.adcode);
+        },
+        __onFeatureClickOutside() {
+          const row = this.onLevel(this.__areaNode.adcode);
+          this.onChange(row.targetParent);
+        },
+      });
+
+      A2.onChange(provinces[0].adcode);
+    </script>
+  </body>
+</html>

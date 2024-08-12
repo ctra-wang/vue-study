@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="../axios/axios.min.js"></script>
+  </head>
+  <body>
+    <script>
+      // get 请求
+      axios
+        .get("https://jsonplaceholder.typicode.com/posts/1")
+        .then((response) => {
+          console.log("-------------");
+          console.log("get.data:", response.data);
+        })
+        .catch((error) => {
+          console.log("get.error:", error);
+        })
+        .finally(() => {
+          console.log("get.finally");
+        });
+
+      // async/await 使用同步的方式编写异步代码
+      // 避免回调地狱
+      // 优势：在处理多个一步操作的情况下，可以是代码更简洁易读
+      // 回掉地狱：是指过度使用向前的回调函数，导致代码难以胡阅读和维护
+      const getData = async () => {
+        try {
+          const response = await axios.get(
+            "https://jsonplaceholder.typicode.com/posts/1"
+          );
+          console.log("get.data:", response.data.title);
+        } catch (error) {
+          console.log("get.error:", error);
+        } finally {
+        }
+      };
+      getData();
+    </script>
+  </body>
+</html>

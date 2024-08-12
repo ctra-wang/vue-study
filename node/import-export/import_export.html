@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- 启动这个页面需要启动一个服务：Live Server 
+     open with live server
+     -->
+    <script type="module">
+      //一：普通导入、 定义一个别名 import{web as web1}
+      import { web as web1, name, getWeb } from "./import_export.js";
+      console.log(web1);
+      console.log(name);
+      console.log(getWeb());
+
+      // 二：对象导入  使用对象的方式导入
+      import obj from "./import_export.js";
+      console.log(obj.web);
+      console.log(obj.name);
+      console.log(obj.getWeb());
+
+      // 三：* 为对象内所有属性变量  使用对象的方式导入
+      import * as obj from "./import_export.js";
+      console.log(obj.web);
+      console.log(obj.name);
+      console.log(obj.getWeb());
+    </script>
+  </body>
+</html>

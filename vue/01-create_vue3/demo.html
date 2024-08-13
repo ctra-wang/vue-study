@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="../vue.global.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      {{ msg }}
+      <h2>{{ web.title}}</h2>
+      <h2>{{ web.url}}</h2>
+    </div>
+
+    <script>
+      // 通过解构的方式 赋值给 Vue （注意v大写）
+      const { createApp, reactive } = Vue;
+
+      createApp({
+        // setup 选项，用于设置响应式数据和方法等
+        setup() {
+            // reactive（关键子）：用于存储复杂数据类型，如对象或数组
+          const web = reactive({
+            title: "wangdada",
+            url: "ctra.top",
+          });
+
+          return {
+            msg: "success",
+            web
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

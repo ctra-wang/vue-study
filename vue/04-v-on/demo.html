@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      {{ msg }}
+      <h2>{{ web.title}}</h2>
+      <h2>{{ web.url}}</h2>
+      <h2>{{ number}}</h2>
+      <h2>{{ arr}}</h2>
+    </div>
+
+    <script type="module">
+      // 引入需要的模块下的方法
+      // 引入后如果不在script加上 module 类型则报错：SyntaxError: Cannot use import statement outside a module
+
+      import { createApp, reactive, ref } from "../vue.esm-browser.js";
+
+      // const { createApp, reactive } = Vue;
+
+      // 此时预览需要再 live-server下（即：服务器运行才行）
+      createApp({
+        // setup 选项，用于设置响应式数据和方法等
+        setup() {
+          const number = ref(10); //ref（关键子）：用于存储单个基本类型的数据，如：数字、字符串等
+          const arr = ref([8, 5, 7]);
+          number.value = 857; // 使用ref创建的响应式对象，需要通过 .value 属性来访问和修改其值
+          const web = reactive({
+            title: "wangdada",
+            url: "ctra.top",
+          });
+          web.url = "www.baidu,comn";
+
+          return {
+            msg: "success",
+            number,
+            arr,
+            web,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

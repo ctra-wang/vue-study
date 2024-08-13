@@ -9,9 +9,13 @@
     <div id="app">
       {{ web.show }} <br />
       <!--实际效果  <p style="display: none;">wangdada ctra.top</p> -->
-      <p v-show="web.show">wangdada ctra.top</p> 
+      <p v-show="web.show">wangdada ctra.top</p>
+      <p v-if="web.show">www.ctra.top</p>
 
       <button @click="toggle">click me</button>
+      <p v-if="web.user <1000">lower</p>
+      <p v-else-if="web.user >=1000 && web.user <10000">normal</p>
+      <p v-else="web.user >=10000">high</p>
     </div>
 
     <script type="module">
@@ -24,7 +28,8 @@
         // setup 选项，用于设置响应式数据和方法等
         setup() {
           const web = reactive({
-            show: false,
+            show: true,
+            user: 50000,
           });
 
           const toggle = () => {

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .textColor {
+        color: aquamarine;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <input type="text" v-bind:value="web.url" /><br>
+      <input type="text" :value="web.url" /><br>
+
+
+      <img v-bind:src="web.img"  /><br>
+      <img :src="web.img"  /><br>
+
+      <!-- 说明：textColor:web.fontStatus 为 true，渲染class样式，否则不渲染 -->
+      <b v-bind:class="{textColor:false}">ctra.top</b><br>
+      <b :class="{textColor:web.fontStatus}">ctra.top</b>
+    </div>
+
+    <script type="module">
+      // v-show: 不会增加和删除dom中的元素（而v-if会）
+
+      import { createApp, reactive } from "../vue.esm-browser.js";
+
+      // 此时预览需要再 live-server下（即：服务器运行才行）
+      createApp({
+        // setup 选项，用于设置响应式数据和方法等
+        setup() {
+          const web = reactive({
+            url: "www.ctra.top",
+            img: "../vue.png",
+            fontStatus: true,
+          });
+
+          return {
+            web,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

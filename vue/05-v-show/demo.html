@@ -7,14 +7,10 @@
   </head>
   <body>
     <div id="app">
-      {{ msg }}
-      <h2>{{ web.title}}</h2>
-      <h2>{{ web.url}}</h2>
-      <h2>{{ web.user}}</h2>
-      <button v-on:click="edit">修改</button> <br />
-      <button @click="edit">修改-简写</button><br />
+      {{ web.show }} <br />
+      <p v-show="web.show">wangdada ctra.top</p>
 
-      回车：<input type="text" @Keyup.enter="add(31,21)"></input>
+      <button @click="toggle">click me</button>
     </div>
 
     <script type="module">
@@ -27,26 +23,16 @@
         // setup 选项，用于设置响应式数据和方法等
         setup() {
           const web = reactive({
-            title: "wangdada",
-            url: "ctra.top",
-            user: 0,
+            show: false,
           });
 
-          const edit = () => {
-            web.url = "www.857.com";
+          const toggle = () => {
+            console.log("-----点了一下！");
+            web.show = !web.show;
           };
-
-          const add = (a, b) => {
-             web.user += a + b;
-          };
-
-          web.url = "www.baidu,comn";
-
           return {
-            msg: "success",
             web,
-            edit,
-            add
+            toggle,
           };
         },
       }).mount("#app");

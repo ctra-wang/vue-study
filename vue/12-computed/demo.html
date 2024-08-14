@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .textColor {
+        color: aquamarine;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <h3>add:{{ add()}}</h3>
+      <h3>add:{{ add()}}</h3>
+
+      <!-- 注意：sub是属性，不是方法
+       只会被执行一次（有缓存） -->
+      <h3>sub:{{ sub }}</h3>
+      <h3>sub:{{ sub }}</h3>
+
+      <hr>
+      <p>原始价格: {{ price }}</p>
+      <p>打折后价格: {{ discountedPrice }}</p>
+      <p>价格描述: {{ priceDescription }}</p>
+    </div>
+
+    <script type="module">
+      // 计算属性：有缓存（计算属性根据其依赖的响应式数据变化而重新计算
+
+      import { createApp, reactive, computed,ref } from "../vue.esm-browser.js";
+
+      // 此时预览需要再 live-server下（即：服务器运行才行）
+      createApp({
+        // setup 选项，用于设置响应式数据和方法等
+        setup() {
+          const data = reactive({
+            x: 10,
+            y: 20,
+          });
+
+          let add = () => {
+            console.log("add");
+            return data.x + data.y;
+          };
+
+
+          let sub = computed(() => {
+            console.log("sub");
+            return data.x - data.y;
+          });
+
+          const price = ref(100);
+          const discount = ref(0.1);
+
+          // 定义计算属性
+          const discountedPrice = computed(() => {
+            return price.value - price.value * discount.value;
+          });
+
+          const priceDescription = computed(() => {
+            return `打折后的价格是 ${discountedPrice.value} 元`;
+          });
+
+          return {
+            data,
+            add,
+            sub,
+            price,
+            discount,
+            discountedPrice,
+            priceDescription
+          };
+
+
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

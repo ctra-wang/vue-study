@@ -4,11 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <style>
-      .textColor {
-        color: aquamarine;
-      }
-    </style>
   </head>
 
   <body>
@@ -23,14 +18,14 @@
       <hr />
 
       车
-      <select v-model="data.year">
+      <select v-model="date.year">
         <option value="2023">2023</option>
         <option value="2024">2024</option>
         <option value="2025">2025</option>
       </select>
 
       月
-      <select v-model="data.month">
+      <select v-model="date.month">
         <option value="">please select</option>
         <option value="10">10</option>
         <option value="11">11</option>
@@ -46,7 +41,7 @@
         reactive,
         computed,
         ref,
-        watch,
+        watchEffect,
       } from "../vue.esm-browser.js";
 
       // 此时预览需要再 live-server下（即：服务器运行才行）
@@ -54,48 +49,31 @@
         // setup 选项，用于设置响应式数据和方法等
         setup() {
           const hobby = ref(""); // 爱好
-          const data = reactive({
+          const date = reactive({
             // 日期
             year: "2023",
             month: "10",
           });
 
-          //监听
-          watch(hobby, (newV, oldV) => {
-            console.log("newV:", newV, ",oldV:", oldV);
-            if (newV == "2") {
-              console.log("write");
+          watchEffect(() => {
+            console.log("--------监听开始：");
+            if (hobby.value == "2") {
+              console.log("draw");
             }
-          });
 
-          watch(data, (newV, oldV) => {
-            // JS中 对象和数组是通过引用传递的，而不是通过值传递的
-            // 当修改对象或数组的值时，实际上修改的是对象数组的引用，而不是创建一个新的数组对象或数组
-            // 所以，如果修改对象或数组的值，那怎么打印出来
-
-            console.log("newV:", newV, ",oldV:", oldV);
-            if (newV.year == "2025") {
+            if (date.year == "2025") {
               console.log("2025");
             }
-            if (newV.month == "11") {
+            if (date.month == "11") {
               console.log("11");
             }
-          });
 
-          // 监听 data中的某个属性：year
-          watch(
-            () => data.year,
-            (newV, oldV) => {
-              console.log("监听 data中的某个属性----newV:", newV, ",oldV:", oldV);
-              if (data.year == "2024") {
-                console.log("2024");
-              }
-            }
-          );
+            console.log("--------监听结束：");
+          });
 
           return {
             hobby,
-            data,
+            date,
           };
         },
       }).mount("#app");

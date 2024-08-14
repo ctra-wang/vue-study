@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <input type="text" v-model="data.content" />
+      <button @click="add">添加</button>      <button @click="clear">清空数组</button>
+      <hr />
+      数组详情如下：
+      <ul>
+        <li v-for="(value,index) in data.list">
+          {{index}}-{{value}} <button @click="del(index)">删除</button>
+        </li>
+      </ul>
+      <hr>
+      总长度 {{data.list.length}}
+    </div>
+
+    <script type="module">
+      // 计算属性：有缓存（计算属性根据其依赖的响应式数据变化而重新计算
+
+      import {
+        createApp,
+        reactive,
+        computed,
+        ref,
+        watchEffect,
+      } from "../vue.esm-browser.js";
+
+      // 此时预览需要再 live-server下（即：服务器运行才行）
+      createApp({
+        // setup 选项，用于设置响应式数据和方法等
+        setup() {
+          const data = reactive({
+            content: "www.ctra.top",
+            list: ["wangdada", "ctra.top"],
+          });
+          const clear =()=>{
+            data.list = []
+          }
+          const add =()=>{
+            data.list.push(data.content)
+          }
+          const del = (index) => {
+            data.list.splice(index, 1);
+          };
+          return {
+            data,
+            add,
+            del,
+            clear
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

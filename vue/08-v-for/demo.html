@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .textColor {
+        color: aquamarine;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <ul>
+        <li v-for="value in data.number">{{value}}</li>
+      </ul>
+
+      <ul>
+        <li v-for="(value,index) in data.number">{{index}}->{{value}}</li>
+      </ul>
+
+      <!-- 遍历数组 -->
+      <ul>
+        <li v-for="(value,key) in data.user">{{key}} : {{value}}</li>
+      </ul>
+
+      <ul>
+        <li v-for="(value,key,index) in data.user">
+          {{index}} = {{key}} : {{value}}
+        </li>
+      </ul>
+
+      <ul>
+        <!-- Template 可以包装多个元素，多行代码，不会被渲染 -->
+        <template v-for="(value,key,index) in data.user">
+          <li v-if="index==1">{{index}} = {{key}} : {{value}}</li>
+        </template>
+      </ul>
+
+      <!-- 遍历对象 -->
+      <ul>
+        <li
+          v-for="(obj,index) in data.teacher"
+          :title="obj.name"
+          :name="obj.id"
+        >
+          {{index}} : {{obj.id}}
+        </li>
+      </ul>
+    </div>
+
+    <script type="module">
+      // v-show: 不会增加和删除dom中的元素（而v-if会）
+
+      import { createApp, reactive } from "../vue.esm-browser.js";
+
+      // 此时预览需要再 live-server下（即：服务器运行才行）
+      createApp({
+        // setup 选项，用于设置响应式数据和方法等
+        setup() {
+          const data = reactive({
+            number: ["one", "two", "three"],
+            user: {
+              //对象
+              name: "link",
+              gender: "women",
+            },
+            teacher: [
+              //包含两个对象的数组
+              { id: 100, name: "wangdada", web: "ctra.top" },
+              { id: 101, name: "wangdd", web: "www.ctra.top" },
+            ],
+          });
+
+          return {
+            data,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

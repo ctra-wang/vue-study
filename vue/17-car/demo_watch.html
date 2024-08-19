@@ -42,7 +42,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <td>总价 {{totalPrice()}}</td>
+            <td>总价 {{totalPrice}}</td>
           </tr>
         </tfoot>
       </table>
@@ -51,7 +51,12 @@
     <script type="module">
       // 计算属性：有缓存（计算属性根据其依赖的响应式数据变化而重新计算
 
-      import { createApp, reactive, watch } from "../vue.esm-browser.js";
+      import {
+        createApp,
+        reactive,
+        watch,
+        computed,
+      } from "../vue.esm-browser.js";
 
       // 此时预览需要再 live-server下（即：服务器运行才行）
       createApp({
@@ -92,7 +97,7 @@
                 data.checkboxList = data.list;
                 console.log(data.checkboxList);
               } else {
-                if (flag){
+                if (flag) {
                   data.checkboxList = [];
                 }
               }
@@ -103,7 +108,7 @@
           watch(
             () => data.checkboxList,
             (newVal, oldVal) => {
-              if (newVal.length == data.list.length && data.list.length != 0 ) {
+              if (newVal.length == data.list.length && data.list.length != 0) {
                 data.selected = true;
                 flag = true;
               } else {
@@ -113,15 +118,34 @@
             }
           );
 
-          const totalPrice = () => {
-            let total = 0;
-            for (let index = 0; index < data.checkboxList.length; index++) {
-              total +=
-                data.checkboxList[index].price *
-                data.checkboxList[index].number;
-            }
-            return total;
-          };
+          // const totalPrice = () => {
+          //   let total = 0;
+          //   for (let index = 0; index < data.checkboxList.length; index++) {
+          //     total +=
+          //       data.checkboxList[index].price *
+          //       data.checkboxList[index].number;
+          //   }
+          //   return total;
+          // };
+
+          // 计算属性：有缓存 【计算属性根据其以来的响应式数据变化而重新计算】
+          const totalPrice = computed(() => {
+            /*
+              reduce定义：用于对数组中的所有元素进行迭代操作，并将每次操作的记过累加到一个初始值上
+
+              reduce接收两个参数：一个是累加器函数，另一个是初始值
+
+              reduce：将data.checkboxList 数组中的每个checkbox 对象的 price和number 属性进行相乘，并将结果累加到初始值0上，最后返回累加的结果
+
+              total（累加器）：用于存储每次计算的结果，初始值为0
+              item（当前元素）在每次迭代过程中，当前元素的值会被传递给回调函数
+            */
+
+            return data.checkboxList.reduce(
+              (tital, item) => tital + item.price * item.number,
+              0
+            );
+          });
 
           const sub = (value) => {
             value.number--;

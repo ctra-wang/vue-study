@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./axios.min.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <select v-model="data.type">
+        <option value="0">请选择</option>
+        <option value="1">ID</option>
+        <option value="2">标题</option>
+      </select>
+      <input type="text" v-model="data.content" />
+      <button @click="search">搜索</button>
+    </div>
+
+    <script type="module">
+      // 计算属性：有缓存（计算属性根据其依赖的响应式数据变化而重新计算
+
+      import {
+        createApp,
+        reactive,
+        computed,
+        ref,
+      } from "../vue.esm-browser.js";
+
+      // 此时预览需要再 live-server下（即：服务器运行才行）
+      createApp({
+        // setup 选项，用于设置响应式数据和方法等
+        setup() {
+          const data = reactive({
+            type: "0", // 搜索类型
+            content: "", // 搜索内容
+            list: [],
+          });
+
+          const search = () => {
+            console.log();
+
+            if (data.type == "1") {
+              let id = data.content;
+
+              // get 请求
+              axios
+                .get(`https://jsonplaceholder.typicode.com/todos/${id}`)
+                .then((response) => {
+                  console.log("get.data:", response.data);
+                })
+                .catch((error) => {
+                  console.log("get.error:", error);
+                });
+            }
+          };
+
+          return {
+            data,
+            search
+      
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

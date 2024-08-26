@@ -1,5 +1,6 @@
-
 <script setup>
+const props = defineProps(["name", "url"])
+console.log(props);
 
 </script>
 
@@ -7,5 +8,4 @@
     <h3>header</h3>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

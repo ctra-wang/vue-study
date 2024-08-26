@@ -1,11 +1,20 @@
-<template>
-   <h3>foot</h3>
-</template>
+<script setup>
+const props = defineProps({
+   userNum: Number,
+   url: {
+      type: String,
+      required: true,
+      default: "www.baidu.com"
 
-<script>
+   }
+})
+console.log(props);
 
 </script>
+<template>
+   <h3>foot {{ props.userNum }}</h3>
+</template>
 
-<style  scoped>
 
-</style>
+
+<style scoped></style>
